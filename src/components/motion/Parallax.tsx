@@ -1,3 +1,5 @@
+"use client";
+
 import {
   motion,
   useReducedMotion,
@@ -10,16 +12,13 @@ import { useEffect, useRef, useState } from "react";
 type Props = {
   offset?: number;
   children?: React.ReactNode;
-  className?: string;
-  [x: string]: any;
 };
 
 export default function Parallax({
   offset = 50,
-  className = "",
   children,
-  ...rest
-}: Props) {
+  ...props
+}: React.ComponentPropsWithoutRef<typeof motion.div> & Props) {
   const prefersReducedMotion = useReducedMotion();
   const [elementTop, setElementTop] = useState(0);
   const [clientHeight, setClientHeight] = useState(0);
@@ -39,8 +38,7 @@ export default function Parallax({
 
     const onResize = () => {
       setElementTop(
-        element.getBoundingClientRect().top + window.scrollY ||
-          window.pageYOffset
+        element.getBoundingClientRect().top + window.scrollY || window.scrollY
       );
       setClientHeight(window.innerHeight);
     };
@@ -54,15 +52,11 @@ export default function Parallax({
 
   // Return only div when user has "reduced motion" enabled
   if (prefersReducedMotion) {
-    return (
-      <div className={className} {...rest}>
-        {children}
-      </div>
-    );
+    return <motion.div {...props}>{children}</motion.div>;
   }
 
   return (
-    <motion.div ref={ref} style={{ y }} className={className} {...rest}>
+    <motion.div ref={ref} style={{ y }} {...props}>
       {children}
     </motion.div>
   );
