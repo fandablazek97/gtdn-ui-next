@@ -9,16 +9,14 @@ import {
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
-type Props = {
-  offset?: number;
-  children?: React.ReactNode;
-};
-
 export default function Parallax({
   offset = 50,
   children,
   ...props
-}: React.ComponentPropsWithoutRef<typeof motion.div> & Props) {
+}: React.ComponentPropsWithoutRef<typeof motion.div> & {
+  offset?: number;
+  children?: React.ReactNode;
+}) {
   const prefersReducedMotion = useReducedMotion();
   const [elementTop, setElementTop] = useState(0);
   const [clientHeight, setClientHeight] = useState(0);
